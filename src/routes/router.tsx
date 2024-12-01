@@ -1,26 +1,19 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import LoadingScreen from "../components/loading";
-import NotFound from "../components/not-found";
-
-const router = createBrowserRouter([
-  {
-    id: "root",
-    path: "/",
-    lazy: () => import("../layouts/main/index"),
-    errorElement: <NotFound />,
-    children: [
-      {
-        index: true,
-        lazy: () => import("../features/home/pages/Landing"),
-      },
-      {
-        path: "/pelicula",
-        lazy: () => import("../features/movie/pages/AddPelicula"),
-      },
-    ],
-  },
-]);
+import { Route, Routes } from "react-router";
+import { Layout } from "../layouts/main";
+import {
+  ListPelicula,
+  AddPelicula,
+  EditPelicula,
+} from "../features/pelicula/pages";
 
 export default function Router() {
-  return <RouterProvider router={router} fallbackElement={<LoadingScreen />} />;
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index path=":q?" element={<ListPelicula />} />
+        <Route path="pelicula" element={<AddPelicula />} />
+        <Route path="pelicula/:pid" element={<EditPelicula />} />
+      </Route>
+    </Routes>
+  );
 }

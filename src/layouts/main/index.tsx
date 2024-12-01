@@ -1,15 +1,12 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import { AppShell, UnstyledButton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Footer } from "./footer";
-import classes from "./root.module.css";
+import Footer from "./footer";
 import Header from "./header";
 
-/*export async function loader() {
-  return null;
-}*/
+import classes from "./root.module.css";
 
-export function Component() {
+export function Layout() {
   const [opened, { toggle }] = useDisclosure();
 
   return (

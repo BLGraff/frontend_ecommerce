@@ -1,5 +1,5 @@
 import { Center, Image } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import logoApp from "../assets/images/logo.svg";
 
 export default function Logo() {

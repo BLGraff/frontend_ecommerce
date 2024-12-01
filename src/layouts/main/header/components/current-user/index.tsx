@@ -1,6 +1,6 @@
+import { useAuth } from "react-oidc-context";
 import { Avatar, Menu, Group, Tooltip, NavLink } from "@mantine/core";
 import { SignOut, Question, User } from "@phosphor-icons/react";
-import { useAuth } from "react-oidc-context";
 
 export default function CurrentUser() {
   const auth = useAuth();

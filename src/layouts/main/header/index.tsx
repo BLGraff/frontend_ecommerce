@@ -1,23 +1,15 @@
-import { Link } from "react-router-dom";
-import { TextInput, Burger } from "@mantine/core";
+import { Fragment } from "react/jsx-runtime";
+import { Link } from "react-router";
+import { useAuth } from "react-oidc-context";
+import { Burger } from "@mantine/core";
 import { Group } from "@mantine/core";
 import { ActionIcon } from "@mantine/core";
+import { SignIn, ShoppingCart, Bell, FileVideo } from "@phosphor-icons/react";
 
 import Logo from "../../../components/logo";
-import LayoutColor from "./btn-color-layout";
-import CurrentUser from "./current-user";
-import {
-  MagnifyingGlass,
-  SignIn,
-  ShoppingCart,
-  Bell,
-  ArrowRight,
-  FileVideo,
-} from "@phosphor-icons/react";
-import { useAuth } from "react-oidc-context";
-import { Fragment } from "react/jsx-runtime";
-
-//import classes from "./header.module.css";
+import LayoutColor from "./components/btn-color-layout";
+import CurrentUser from "./components/current-user";
+import SearchPeliculas from "./components/SearchPeliculas";
 
 interface Props {
   opened: boolean;
@@ -37,18 +29,7 @@ export default function Header({ opened, open }: Props) {
           <Logo />
         </Group>
 
-        <TextInput
-          radius="xl"
-          size="md"
-          placeholder="Buscar película"
-          rightSectionWidth={42}
-          leftSection={<MagnifyingGlass />}
-          rightSection={
-            <ActionIcon size={32} radius="xl" variant="filled" color="#214478">
-              <ArrowRight />
-            </ActionIcon>
-          }
-        />
+        <SearchPeliculas />
 
         <Group ml="xl" gap={0} visibleFrom="sm">
           <ActionIcon

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { Eye, ChatCircleDots } from "@phosphor-icons/react";
 import { Card, Text, Group, Center } from "@mantine/core";
 import classes from "./card.module.css";

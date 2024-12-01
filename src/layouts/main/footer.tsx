@@ -1,7 +1,7 @@
+import { NavLink } from "react-router";
 import { Center, Text, Anchor } from "@mantine/core";
-import { NavLink } from "react-router-dom";
 
-export function Footer() {
+export default function Footer() {
   return (
     <Center>
       <Text fz="sm" c="dimmed" ta="center">
