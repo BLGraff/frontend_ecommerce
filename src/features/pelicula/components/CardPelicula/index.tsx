@@ -1,30 +1,23 @@
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 import { Eye, ChatCircleDots } from "@phosphor-icons/react";
 import { Card, Text, Group, Center } from "@mantine/core";
 import classes from "./card.module.css";
+import { Pelicula } from "../../entities/Pelicula";
 
-interface Props {
-  id: string;
-  urlImagen: string;
-  titulo: string;
-  precio: number;
-}
-
-export default function CardPelicula({ id, urlImagen, titulo, precio }: Props) {
+export default function CardPelicula({ pelicula }: { pelicula: Pelicula }) {
   return (
     <Card
       p="lg"
       shadow="lg"
       className={classes.card}
       radius="md"
-      component={Link}
-      to={`/pelicula/${id}`}
-      target="_blank"
+      component={NavLink}
+      to={`/pelicula/${pelicula.id}`}
     >
       <div
         className={classes.image}
         style={{
-          backgroundImage: `url(${urlImagen} )`,
+          backgroundImage: `url(${pelicula.imagen} )`,
         }}
       />
       <div className={classes.overlay} />
@@ -32,12 +25,12 @@ export default function CardPelicula({ id, urlImagen, titulo, precio }: Props) {
       <div className={classes.content}>
         <div>
           <Text size="lg" className={classes.title} fw={500}>
-            {titulo}
+            {pelicula.titulo}
           </Text>
 
           <Group justify="space-between" gap="xs">
             <Text size="sm" className={classes.author}>
-              ${precio}
+              ${pelicula.precio}
             </Text>
 
             <Group gap="lg">

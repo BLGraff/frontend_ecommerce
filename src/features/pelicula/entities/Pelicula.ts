@@ -1,4 +1,5 @@
 export interface Pelicula {
+  id: string;
   titulo: string;
   fechaSalida: string;
   precio: number;
