@@ -1,123 +1,87 @@
-import {
-  Button,
-  Container,
-  Group,
-  NumberInput,
-  Paper,
-  Select,
-  TextInput,
-  Title,
-} from "@mantine/core";
+import { Container, Title } from "@mantine/core";
+import { Button, Paper } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { z } from "zod";
 
-import { CurrencyDollar } from "@phosphor-icons/react";
-//import { notifications } from "@mantine/notifications";
-//import { Pelicula } from "../entities/Pelicula";
+import PeliculaForm from "../components/PeliculaForm";
+import { useEditPelicula } from "../hooks/useEditPelicula";
+import { Pelicula, peliculaSchema } from "../entities/Pelicula";
+import { useParams } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import fetchPelicula from "../services/fetchPelicula";
+import LoadingScreen from "../../../components/loading";
 
 export function EditPelicula() {
-  /*const handleSubmit = async (values: Pelicula) => {
+  const { pid } = useParams();
+
+  console.log(pid);
+  const { isLoading, isRefetching, error, data } = useQuery({
+    queryKey: ["pelicula"],
+    queryFn: () => fetchPelicula(pid),
+  });
+
+  const mutation = useEditPelicula();
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     try {
-      const id = notifications.show({
-        loading: true,
-        title: "Agregar película",
-        message: "Enviando solicitud al servidor",
-        autoClose: false,
-        withCloseButton: false,
+      event.preventDefault();
+
+      const form = event.currentTarget; // Referencia al formulario.
+      const formData = new FormData(form); // Extrae los datos del formulario.
+
+      //const values = Object.fromEntries(formData.entries()); // Convierte los datos en un objeto.
+      //const message = formData.get('message')?.toString() ?? ''
+
+      const pelicula: Pelicula = peliculaSchema.parse({
+        id: pid,
+        titulo: formData.get("titulo")?.toString() ?? "",
+        //fechaSalida: "05/12/2024",
+        precio: parseInt(formData.get("precio")?.toString() ?? "", 10),
+        imagen: formData.get("imagen")?.toString() ?? "",
+        rating: 0,
+        formato: formData.get("formato")?.toString() ?? "",
+        condicion: formData.get("condicion")?.toString() ?? "",
+        genero: formData.get("genero")?.toString() ?? "",
+        resumen: formData.get("resumen")?.toString() ?? "",
       });
 
-      const response = await fetch("http://localhost:5055/pelicula", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
-
-      if (!response.ok) {
-        notifications.update({
-          id,
-          color: "red",
-          title: "Agregar película",
-          message: "Error en la solicitud",
-          loading: false,
-          autoClose: 2000,
-        });
-      }
-
+      mutation.mutate(pelicula);
       form.reset();
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        //console.error("Errores de validación:", error.errors);
 
-      notifications.update({
-        id,
-        color: "teal",
-        title: "Agregar película",
-        message: "Se agrego con éxito",
-        icon: <Check />,
-        loading: false,
-        autoClose: 2000,
-      });
-    } catch {
-      notifications.show({
-        color: "red",
-        title: "Agregar película",
-        message: "Se produjo un error",
-      });
+        error.errors.forEach((e) => {
+          notifications.show({
+            title: "Error al agregar película",
+            message: e.message,
+            color: "red",
+          });
+        });
+      } else {
+        notifications.show({
+          title: "Error al agregar película",
+          message: "Error inesperado",
+          color: "red",
+        });
+        console.error("Error inesperado:", error);
+      }
     }
-  };*/
+  };
 
+  if (isLoading || isRefetching) return <LoadingScreen />;
+
+  if (error) return "An error has occurred: " + error.message;
+
+  console.log(data);
   return (
     <Container>
       <Title>Editar película</Title>
-
       <Paper withBorder shadow="md" p={30} my={25} radius="md">
-        <form>
-          <TextInput required label="Título" placeholder="ingrese el título" />
-
-          <NumberInput
-            leftSection={<CurrencyDollar size={16} />}
-            mt="md"
-            required
-            label="Precio"
-            placeholder="ingrese el precio"
-          />
-
-          <TextInput
-            mt="md"
-            required
-            label="Imagen"
-            placeholder="ingrese url"
-          />
-
-          <Group justify="space-between">
-            <Select
-              mt="md"
-              required
-              label="Formato"
-              placeholder="selecione el formato"
-              data={["DVD", "BLUE_RAY", "CD"]}
-            />
-            <Select
-              mt="md"
-              required
-              label="Condición"
-              placeholder="selecione el condicion"
-              data={["NUEVO", "USADO"]}
-            />
-
-            <Select
-              mt="md"
-              required
-              label="Genero"
-              placeholder="selecione el genero"
-              data={["FEMENINO", "MASCULINO"]}
-            />
-          </Group>
-
-          <TextInput
-            mt="md"
-            required
-            label="Resumen"
-            placeholder="ingrese resumen"
-          />
-
-          <Button type="submit" fullWidth mt="xl">
-            AGREGAR
+        <form onSubmit={handleSubmit}>
+          <PeliculaForm pelicula={data} />
+          <Button type="submit" fullWidth mt="xl" disabled={mutation.isPending}>
+            {mutation.isPending ? "Editando.." : "APLICAR CAMBIOS"}
           </Button>
         </form>
       </Paper>
