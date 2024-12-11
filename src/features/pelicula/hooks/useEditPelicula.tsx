@@ -2,17 +2,12 @@ import { notifications } from "@mantine/notifications";
 import { Check } from "@phosphor-icons/react";
 import { useMutation } from "@tanstack/react-query";
 import { Pelicula } from "../entities/Pelicula";
+import editPelicula from "../services/editPelicula";
 
 export const useEditPelicula = () => {
   return useMutation({
     mutationFn: (pelicula: Pelicula) => {
-      //console.log(pelicula);
-      //return axios.post('/todos', newTodo)
-      return fetch(`http://localhost:5055/pelicula/${pelicula.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(pelicula),
-      });
+      return editPelicula(pelicula);
     },
     onMutate() {
       // antes de la mutacion, podemos guardar los datos para roolback

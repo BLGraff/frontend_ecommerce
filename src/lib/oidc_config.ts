@@ -1,4 +1,3 @@
-import { QueryClient } from "@tanstack/react-query";
 import { UserManager, WebStorageStateStore } from "oidc-client-ts";
 
 export const userManager = new UserManager({
@@ -17,15 +16,3 @@ export const userManager = new UserManager({
 export const onSigninCallback = () => {
   window.history.replaceState({}, document.title, window.location.pathname);
 };
-
-export const queryClient = new QueryClient(/*{
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 1,
-      //retry: 1,
-      //refetchIntervalInBackground: false,
-      //refetchInterval: 3000,
-      //refetchOnReconnect: false,
-    },
-  },
-}*/);

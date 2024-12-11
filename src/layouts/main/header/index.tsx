@@ -18,6 +18,7 @@ interface Props {
 
 export default function Header({ opened, open }: Props) {
   const auth = useAuth();
+  //console.log(auth);
   const rol = auth.user?.profile.family_name;
 
   return (

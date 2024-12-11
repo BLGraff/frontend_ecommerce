@@ -1,5 +1,7 @@
+import axios from "axios";
+
 export default async function fetchPeliculas(query?: string) {
-  return await fetch(`http://localhost:5055/pelicula?titulo=${query}`).then(
-    (res) => res.json()
-  );
+  return await axios
+    .get(`http://localhost:5055/pelicula/public?titulo=${query}`)
+    .then((res) => res.data);
 }

@@ -1,6 +1,7 @@
 import { Container, Title } from "@mantine/core";
 import { Button, Paper } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { useAuth } from "react-oidc-context";
 import { z } from "zod";
 
 import PeliculaForm from "../components/PeliculaForm";
@@ -12,9 +13,10 @@ import fetchPelicula from "../services/fetchPelicula";
 import LoadingScreen from "../../../components/loading";
 
 export function EditPelicula() {
+  const auth = useAuth();
   const { pid } = useParams();
 
-  console.log(pid);
+  //console.log(pid);
   const { isLoading, isRefetching, error, data } = useQuery({
     queryKey: ["pelicula"],
     queryFn: () => fetchPelicula(pid),
@@ -69,11 +71,18 @@ export function EditPelicula() {
     }
   };
 
-  if (isLoading || isRefetching) return <LoadingScreen />;
+  if (isLoading || isRefetching) {
+    return <LoadingScreen />;
+  }
 
-  if (error) return "An error has occurred: " + error.message;
+  if (error) {
+    //ir al login
 
-  console.log(data);
+    auth.signinRedirect();
+    //return "An error has occurred: " + error.message
+  }
+
+  //console.log(data);
   return (
     <Container>
       <Title>Editar película</Title>
