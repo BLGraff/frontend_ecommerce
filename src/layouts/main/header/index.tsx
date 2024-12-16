@@ -1,5 +1,5 @@
 import { Fragment } from "react/jsx-runtime";
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 import { useAuth } from "react-oidc-context";
 import { Burger } from "@mantine/core";
 import { Group } from "@mantine/core";
@@ -10,6 +10,7 @@ import Logo from "../../../components/logo";
 import LayoutColor from "./components/btn-color-layout";
 import CurrentUser from "./components/current-user";
 import SearchPeliculas from "./components/SearchPeliculas";
+import { useCartStore } from "../../../features/venta/store/carrito";
 
 interface Props {
   opened: boolean;
@@ -18,8 +19,9 @@ interface Props {
 
 export default function Header({ opened, open }: Props) {
   const auth = useAuth();
-  //console.log(auth);
   const rol = auth.user?.profile.family_name;
+
+  const { items: ItemIds } = useCartStore();
 
   return (
     <Group h="100%" px="md">
@@ -49,7 +51,10 @@ export default function Header({ opened, open }: Props) {
             radius="md"
             c="inherit"
             mx="10"
+            component={NavLink}
+            to={"/cart"}
           >
+            {ItemIds.length !== 0 ? ItemIds.length : null}
             <ShoppingCart
               style={{ width: "70%", height: "70%" }}
               weight="duotone"
@@ -67,7 +72,7 @@ export default function Header({ opened, open }: Props) {
                   radius="md"
                   c="inherit"
                   mx="10"
-                  component={Link}
+                  component={NavLink}
                   to="/pelicula"
                 >
                   <FileVideo
